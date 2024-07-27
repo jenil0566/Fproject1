@@ -85,7 +85,7 @@ const Payment = () => {
             });
 
             if (type === 'googlepay' && isGoogleEnable) {
-                await handleShareClick(isGoogleEnable, 'gpay');
+                await handleShareClick(isGoogleEnable);
             } else if (type === 'googlepay' && !isGoogleEnable) {
                 await handleShareClick(false, 'phonepe');
             } else if (type === 'phonepay') {
