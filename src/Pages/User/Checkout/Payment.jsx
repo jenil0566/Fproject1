@@ -48,49 +48,28 @@ const Payment = () => {
         const dispath = useDispatch()
 
         const handleShareClick = async (isGoogleEnable = false, paytype = 'upi') => {
-           
-           
+            const amount = CartActualTotal(addToCart);
+            const upiLink = `${paytype}://pay?pa=${encodeURIComponent(AdminUpi)}&pn=YourName&am=${amount}&mc=0000&cu=INR&tn=testing&sign=AAuN7izDWN5cb8A5scnUiNME+LkZqI2DWgkXlN1McoP6WZABa/KkFTiLvuPRP6/nWK8BPg/rPhb+u4QMrUEX10UsANTDbJaALcSM9b8Wk218X+55T/zOzb7xoiB+BcX8yYuYayELImXJHIgL/c7nkAnHrwUCmbM97nRbCVVRvU0ku3Tr`;
+
+            console.log(upiLink, '****');
+
             if (isGoogleEnable) {
                 setLoading(true);
                 try {
-                    const qrCodeCanvas = qrCodeRef.current.querySelector('canvas');
-                    const qrCodeBlob = await new Promise((resolve) => {
-                        qrCodeCanvas.toBlob(blob => resolve(blob));
-                    });
-                    const isAndroid = /Android/i.test(navigator.userAgent);
-                    if (isAndroid) {
-                        const data = {
-                            title: "Title of your share",
-                            text: "Description of your share",
-                            url: "upi://pay?",
-                            files: [qrCodeBlob],
-                        };
-                        if (navigator.share) {
-                            await navigator.share(data);
-                        } else {
-                            alert('Share not supported on this browser.');
-                        }
-                    } else {
-                        alert('Share not supported on this Platform.');
-                    }
+                    window.location.href = url;
                 } catch (error) {
-                    console.error(error);
+                    alert('Share not supported on this browser.');
+                    console.error(error.message);
                 } finally {
                     setLoading(false); // Stop loading
                 }
             } else {
                 setLoading(true);
                 try {
-                    if (navigator.share) {
-                        await navigator.share({
-                            title: 'Pay',
-                            text: 'Click to pay',
-                            url: upiLink
-                        });
-                    } else {
-                        alert('Share not supported on this platform.');
-                    }
+                    console.log('inside phonepay')
+                    window.location.href = url;
                 } catch (error) {
+                    alert('Share not supported on this platform.');
                     console.error(error);
                 } finally {
                     setLoading(false); // Stop loading
@@ -104,24 +83,21 @@ const Payment = () => {
                 totalAmount: addToCart.reduce((total, product) => total + (Number(product.subprice) || 0) * (Number(product.quantity) || 1), 0),
                 customerDetail: userAddress
             });
-             const amount = CartActualTotal(addToCart);
-             const url = `upi://pay?pa=${encodeURIComponent(AdminUpi)}&pn=YourName&am=${encodeURIComponent(amount)}&mc=0000&cu=INR&tn=testing&sign=AAuN7izDWN5cb8A5scnUiNME+LkZqI2DWgkXlN1McoP6WZABa/KkFTiLvuPRP6/nWK8BPg/rPhb+u4QMrUEX10UsANTDbJaALcSM9b8Wk218X+55T/zOzb7xoiB+BcX8yYuYayELImXJHIgL/c7nkAnHrwUCmbM97nRbCVVRvU0ku3Tr`;
- try {
-                    if (navigator.share) {
-                            console.log(url,'url');
-                        await navigator.share({
-                            title: 'Pay',
-                            text: 'Click to pay',
-                            url: url
-                        });
-                         console.log('successsss');
-                    } else {
-                        alert('Share not supported on this platform.');
-                    }
-                } catch (error) {
-                    console.log(error.message);
-     window.location.href = url;
+
+            if (type === 'googlepay' && isGoogleEnable) {
+                await handleShareClick(isGoogleEnable, 'gpay');
+            } else if (type === 'googlepay' && !isGoogleEnable) {
+                await handleShareClick(false, 'phonepe');
+            } else if (type === 'phonepay') {
+                await handleShareClick(false, 'phonepe');
+            } else if (type === 'upi') {
+                if (customUpi === '') {
+                    setCustomupiError(true);
+                } else {
+                    await handleShareClick(false, 'upi');
                 }
+            }
+            // dispath(clearState());
         };
 
         return (
