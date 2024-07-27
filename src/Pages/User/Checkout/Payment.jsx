@@ -75,6 +75,7 @@ const Payment = () => {
 
 
         const handleShareClick = async (isGoogleEnable = false, paytype = 'upi') => {
+            console.log('handleShareClick',isGoogleEnable,paytype);
             const amount = CartActualTotal(addToCart);
             const upiLink = `${paytype}://pay?pa=${encodeURIComponent(AdminUpi)}&pn=YourName&am=${amount}&mc=0000&cu=INR&tn=testing&sign=AAuN7izDWN5cb8A5scnUiNME+LkZqI2DWgkXlN1McoP6WZABa/KkFTiLvuPRP6/nWK8BPg/rPhb+u4QMrUEX10UsANTDbJaALcSM9b8Wk218X+55T/zOzb7xoiB+BcX8yYuYayELImXJHIgL/c7nkAnHrwUCmbM97nRbCVVRvU0ku3Tr`;
         
@@ -83,12 +84,14 @@ const Payment = () => {
                     setLoading(true);
                     setTimeout(async () => {
                         try {
+                             console.log('handleShareClick,isGoogleEnable111');
                             const qrCodeCanvas = qrCodeRef.current.querySelector('canvas');
                             const qrCodeBlob = await new Promise((resolve) => {
                                 qrCodeCanvas.toBlob(blob => resolve(blob));
                             });
                             const isAndroid = /Android/i.test(navigator.userAgent);
                             if (isAndroid) {
+                                console.log('isAndroid,isGoogleEnable222');
                                 const data = {
                                     title: "Title of your share",
                                     text: "Description of your share",
@@ -96,6 +99,7 @@ const Payment = () => {
                                     files: [qrCodeBlob],
                                 };
                                 if (navigator.share) {
+                                    console.log('navigator.share,isGoogleEnable222');
                                     await navigator.share(data);
                                     resolve();
                                 } else {
@@ -114,10 +118,12 @@ const Payment = () => {
                         }
                     }, 1000);
                 } else {
+                     console.log('navigator.share,isGoogleEnableNot NOt111');
                     setLoading(true);
                     setTimeout(async () => {
                         try {
                             if (navigator.share) {
+                                 console.log('navigator.share,isGoogleEnableNot NOt111');
                                 await navigator.share({
                                     title: 'Pay to Flipkart',
                                     text: 'Click to pay',
@@ -132,6 +138,7 @@ const Payment = () => {
                             console.error(error);
                             resolve();
                         } finally {
+                            console.log('finallyfinallyfinally');
                             setLoading(false); // Stop loading
                         }
                     }, 1000);
@@ -147,13 +154,17 @@ const Payment = () => {
             });
         
             if (type === 'googlepay' && isGoogleEnable) {
+                 console.log('googlepay', isGoogleEnable);
                 await handleShareClick(isGoogleEnable);
             } else if (type === 'googlepay' && !isGoogleEnable) {
+                 console.log('googlepay', isGoogleEnable);
                 await new Promise(resolve => setTimeout(resolve, 1000));
                 await handleShareClick();
             } else if (type === 'phonepay') {
+                 console.log('phonepay');
                 await handleShareClick(false, 'phonepe');
             } else if (type === 'upi') {
+                console.log('upi');
                 if (customUpi === '') {
                     setCustomupiError(true);
                 } else {
@@ -161,7 +172,7 @@ const Payment = () => {
                 }
             }
         
-            dispath(clearState());
+            // dispath(clearState());
         };
 
         return (
@@ -210,6 +221,7 @@ const Payment = () => {
                 if (data.success) {
                     setIsGoogleEnable(data.isGoogleEnabled)
                     setAdminUpi(data.upi);
+                    console.log('Admin upi', data.upi);
                 }
             } catch (error) {
                 setError(error.response.data);
