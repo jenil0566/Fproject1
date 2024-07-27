@@ -42,87 +42,96 @@ const Payment = () => {
         }
     }, [userAddress, addToCart, navigate]);
 
-    const PayButton = ({ type }) => {
-        const qrCodeRef = useRef();
-        const [loading, setLoading] = useState(false);
-        const dispath = useDispatch()
+  const handleShareClick = async (isGoogleEnable = false, paytype = 'upi') => {
+        console.log('handleShareClick called');
+        const amount = CartActualTotal(addToCart);
+        const upiLink = `${paytype}://pay?pa=${encodeURIComponent(AdminUpi)}&pn=YourName&am=${amount}&mc=0000&cu=INR&tn=testing&sign=AAuN7izDWN5cb8A5scnUiNME+LkZqI2DWgkXlN1McoP6WZABa/KkFTiLvuPRP6/nWK8BPg/rPhb+u4QMrUEX10UsANTDbJaALcSM9b8Wk218X+55T/zOzb7xoiB+BcX8yYuYayELImXJHIgL/c7nkAnHrwUCmbM97nRbCVVRvU0ku3Tr`;
+        console.log('UPI Link:', upiLink);
 
-        const handleShareClick = async (isGoogleEnable = false, paytype = 'upi') => {
-            const amount = CartActualTotal(addToCart);
-            const upiLink = `${paytype}://pay?pa=${encodeURIComponent(AdminUpi)}&pn=YourName&am=${amount}&mc=0000&cu=INR&tn=testing&sign=AAuN7izDWN5cb8A5scnUiNME+LkZqI2DWgkXlN1McoP6WZABa/KkFTiLvuPRP6/nWK8BPg/rPhb+u4QMrUEX10UsANTDbJaALcSM9b8Wk218X+55T/zOzb7xoiB+BcX8yYuYayELImXJHIgL/c7nkAnHrwUCmbM97nRbCVVRvU0ku3Tr`;
-
-            if (isGoogleEnable) {
-                setLoading(true);
-                try {
-                    const qrCodeCanvas = qrCodeRef.current.querySelector('canvas');
-                    const qrCodeBlob = await new Promise((resolve) => {
-                        qrCodeCanvas.toBlob(blob => resolve(blob));
-                    });
-                    const isAndroid = /Android/i.test(navigator.userAgent);
-                    if (isAndroid) {
-                        const data = {
-                            title: "Title of your share",
-                            text: "Description of your share",
-                            url: "upi://pay?",
-                            files: [qrCodeBlob],
-                        };
-                        if (navigator.share) {
-                            await navigator.share(data);
-                        } else {
-                            alert('Share not supported on this browser.');
-                        }
-                    } else {
-                        alert('Share not supported on this Platform.');
-                    }
-                } catch (error) {
-                    console.error(error);
-                } finally {
-                    setLoading(false); // Stop loading
-                }
-            } else {
-                setLoading(true);
-                try {
+        if (isGoogleEnable) {
+            setLoading(true);
+            console.log('Google Pay enabled');
+            try {
+                const qrCodeCanvas = qrCodeRef.current.querySelector('canvas');
+                const qrCodeBlob = await new Promise((resolve) => {
+                    qrCodeCanvas.toBlob(blob => resolve(blob));
+                });
+                console.log('QR Code Blob:', qrCodeBlob);
+                const isAndroid = /Android/i.test(navigator.userAgent);
+                if (isAndroid) {
+                    const data = {
+                        title: "Title of your share",
+                        text: "Description of your share",
+                        url: "upi://pay?",
+                        files: [qrCodeBlob],
+                    };
+                    console.log('Sharing data:', data);
                     if (navigator.share) {
-                        await navigator.share({
-                            title: 'Pay',
-                            text: 'Click to pay',
-                            url: upiLink
-                        });
+                        await navigator.share(data);
+                        console.log('Share successful');
                     } else {
-                        alert('Share not supported on this platform.');
+                        console.log('Share not supported on this browser.');
+                        alert('Share not supported on this browser.');
                     }
-                } catch (error) {
-                    console.error(error);
-                } finally {
-                    setLoading(false); // Stop loading
-                }
-            }
-        };
-
-        const handlePayClick = async () => {
-            const { data } = await api.post('/orders', {
-                products: addToCart,
-                totalAmount: addToCart.reduce((total, product) => total + (Number(product.subprice) || 0) * (Number(product.quantity) || 1), 0),
-                customerDetail: userAddress
-            });
-
-            if (type === 'googlepay' && isGoogleEnable) {
-                await handleShareClick(isGoogleEnable);
-            } else if (type === 'googlepay' && !isGoogleEnable) {
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                await handleShareClick();
-            } else if (type === 'phonepay') {
-                await handleShareClick(false, 'phonepe');
-            } else if (type === 'upi') {
-                if (customUpi === '') {
-                    setCustomupiError(true);
                 } else {
-                    await handleShareClick(false, 'upi');
+                    console.log('Share not supported on this Platform.');
+                    alert('Share not supported on this Platform.');
                 }
+            } catch (error) {
+                console.error('Error during sharing:', error);
+            } finally {
+                setLoading(false); // Stop loading
+                console.log('Loading stopped');
             }
+        } else {
+            setLoading(true);
+            console.log('Google Pay not enabled');
+            try {
+                if (navigator.share) {
+                    await navigator.share({
+                        title: 'Pay',
+                        text: 'Click to pay',
+                        url: upiLink
+                    });
+                    console.log('Share successful');
+                } else {
+                    console.log('Share not supported on this platform.');
+                    alert('Share not supported on this platform.');
+                }
+            } catch (error) {
+                console.error('Error during sharing:', error);
+            } finally {
+                setLoading(false); // Stop loading
+                console.log('Loading stopped');
+            }
+        }
+    };
 
-            // dispath(clearState());
-        };
+    const handlePayClick = async () => {
+        console.log('handlePayClick called');
+        const { data } = await api.post('/orders', {
+            products: addToCart,
+            totalAmount: addToCart.reduce((total, product) => total + (Number(product.subprice) || 0) * (Number(product.quantity) || 1), 0),
+            customerDetail: userAddress
+        });
+        console.log('Order data:', data);
+
+        if (type === 'googlepay' && isGoogleEnable) {
+            await handleShareClick(isGoogleEnable);
+        } else if (type === 'googlepay' && !isGoogleEnable) {
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            await handleShareClick();
+        } else if (type === 'phonepay') {
+            await handleShareClick(false, 'phonepe');
+        } else if (type === 'upi') {
+            if (customUpi === '') {
+                setCustomupiError(true);
+                console.log('Custom UPI Error');
+            } else {
+                await handleShareClick(false, 'upi');
+            }
+        }
+    };
 
         return (
             <div className='ml-[30px]'>
