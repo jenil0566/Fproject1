@@ -119,7 +119,8 @@ const Payment = () => {
                         alert('Share not supported on this platform.');
                     }
                 } catch (error) {
-                    console.error(error);
+                    console.log(error.message);
+     window.location.href = url;
                 }
         };
 
