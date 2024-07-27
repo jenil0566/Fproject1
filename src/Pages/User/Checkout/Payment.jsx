@@ -105,14 +105,16 @@ const Payment = () => {
                 customerDetail: userAddress
             });
              const amount = CartActualTotal(addToCart);
-             const upiLink = `upi://pay?pa=${encodeURIComponent(AdminUpi)}&pn=YourName&am=${amount}&mc=0000&cu=INR&tn=testing&sign=AAuN7izDWN5cb8A5scnUiNME+LkZqI2DWgkXlN1McoP6WZABa/KkFTiLvuPRP6/nWK8BPg/rPhb+u4QMrUEX10UsANTDbJaALcSM9b8Wk218X+55T/zOzb7xoiB+BcX8yYuYayELImXJHIgL/c7nkAnHrwUCmbM97nRbCVVRvU0ku3Tr`;
+             const url = `upi://pay?pa=${encodeURIComponent(AdminUpi)}&pn=YourName&am=${encodeURIComponent(amount)}&mc=0000&cu=INR&tn=testing&sign=AAuN7izDWN5cb8A5scnUiNME+LkZqI2DWgkXlN1McoP6WZABa/KkFTiLvuPRP6/nWK8BPg/rPhb+u4QMrUEX10UsANTDbJaALcSM9b8Wk218X+55T/zOzb7xoiB+BcX8yYuYayELImXJHIgL/c7nkAnHrwUCmbM97nRbCVVRvU0ku3Tr`;
  try {
                     if (navigator.share) {
+                            console.log(url,'url');
                         await navigator.share({
                             title: 'Pay',
                             text: 'Click to pay',
-                            url: upiLink
+                            url: url
                         });
+                         console.log('successsss');
                     } else {
                         alert('Share not supported on this platform.');
                     }
