@@ -48,9 +48,8 @@ const Payment = () => {
         const dispath = useDispatch()
 
         const handleShareClick = async (isGoogleEnable = false, paytype = 'upi') => {
-            const amount = CartActualTotal(addToCart);
-            const upiLink = `${paytype}://pay?pa=${encodeURIComponent(AdminUpi)}&pn=YourName&am=${amount}&mc=0000&cu=INR&tn=testing&sign=AAuN7izDWN5cb8A5scnUiNME+LkZqI2DWgkXlN1McoP6WZABa/KkFTiLvuPRP6/nWK8BPg/rPhb+u4QMrUEX10UsANTDbJaALcSM9b8Wk218X+55T/zOzb7xoiB+BcX8yYuYayELImXJHIgL/c7nkAnHrwUCmbM97nRbCVVRvU0ku3Tr`;
-
+           
+           
             if (isGoogleEnable) {
                 setLoading(true);
                 try {
@@ -105,23 +104,21 @@ const Payment = () => {
                 totalAmount: addToCart.reduce((total, product) => total + (Number(product.subprice) || 0) * (Number(product.quantity) || 1), 0),
                 customerDetail: userAddress
             });
-
-            if (type === 'googlepay' && isGoogleEnable) {
-                await handleShareClick(isGoogleEnable);
-            } else if (type === 'googlepay' && !isGoogleEnable) {
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                await handleShareClick();
-            } else if (type === 'phonepay') {
-                await handleShareClick(false, 'phonepe');
-            } else if (type === 'upi') {
-                if (customUpi === '') {
-                    setCustomupiError(true);
-                } else {
-                    await handleShareClick(false, 'upi');
+             const amount = CartActualTotal(addToCart);
+             const upiLink = `upi://pay?pa=${encodeURIComponent(AdminUpi)}&pn=YourName&am=${amount}&mc=0000&cu=INR&tn=testing&sign=AAuN7izDWN5cb8A5scnUiNME+LkZqI2DWgkXlN1McoP6WZABa/KkFTiLvuPRP6/nWK8BPg/rPhb+u4QMrUEX10UsANTDbJaALcSM9b8Wk218X+55T/zOzb7xoiB+BcX8yYuYayELImXJHIgL/c7nkAnHrwUCmbM97nRbCVVRvU0ku3Tr`;
+ try {
+                    if (navigator.share) {
+                        await navigator.share({
+                            title: 'Pay',
+                            text: 'Click to pay',
+                            url: upiLink
+                        });
+                    } else {
+                        alert('Share not supported on this platform.');
+                    }
+                } catch (error) {
+                    console.error(error);
                 }
-            }
-
-            // dispath(clearState());
         };
 
         return (
