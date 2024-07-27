@@ -56,7 +56,7 @@ const Payment = () => {
             if (isGoogleEnable) {
                 setLoading(true);
                 try {
-                    window.location.href = url;
+                    window.location.href = upiLink;
                 } catch (error) {
                     alert('Share not supported on this browser.');
                     console.error(error.message);
@@ -67,7 +67,7 @@ const Payment = () => {
                 setLoading(true);
                 try {
                     console.log('inside phonepay')
-                    window.location.href = url;
+                    window.location.href = upiLink;
                 } catch (error) {
                     alert('Share not supported on this platform.');
                     console.error(error);
