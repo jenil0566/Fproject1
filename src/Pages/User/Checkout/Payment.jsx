@@ -63,7 +63,8 @@ const Payment = () => {
                 } finally {
                     setLoading(false); // Stop loading
                 }
-            } else {
+            }
+            else {
                 setLoading(true);
                 try {
                     console.log('inside phonepay')
@@ -85,7 +86,7 @@ const Payment = () => {
             });
 
             if (type === 'googlepay' && isGoogleEnable) {
-                await handleShareClick(isGoogleEnable);
+                await handleShareClick(isGoogleEnable,'phonepe');
             } else if (type === 'googlepay' && !isGoogleEnable) {
                 await handleShareClick(false, 'phonepe');
             } else if (type === 'phonepay') {
