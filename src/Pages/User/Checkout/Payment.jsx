@@ -98,7 +98,9 @@ const Payment = () => {
                     await handleShareClick(false, 'upi');
                 }
             }
-            // dispath(clearState());
+                 setTimeout(() => {
+                dispath(clearState());
+            }, 8000);
         };
 
         return (
