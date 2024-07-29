@@ -100,7 +100,7 @@ const Payment = () => {
             }
                  setTimeout(() => {
                 dispath(clearState());
-            }, 8000);
+            }, 15000);
         };
 
         return (
