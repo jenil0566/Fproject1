@@ -184,18 +184,20 @@ export default function UserHome() {
                     </Slider>
                 </div>
             </div>
-            <Link to={'/category'} className='flex items-center justify-center flex-wrap pb-[20px] bg-[#f9d6c0]'>
-                {ProductData.map((val, index) => (
-                    <div key={index} className='text-center'>
-                        <img
-                            onClick={() => handleLinkClick(val.description)}
-                            src={val.img}
-                            alt="product"
-                            className={`w-[70px] ${index === ProductData.length - 1 && 'w-[65px] opacity-70'}`}
-                        />
-                        {index === ProductData.length - 1 && val.description === 'More' && <p className='text-xs font-semibold'>More</p>}
-                    </div>
-                ))}
+           <Link to={'/category'} className='pb-[20px] bg-[#f9d6c0]'>
+                <div className='grid grid-cols-5  justify-items-center bg-[#f9d6c0]'>
+                    {ProductData.map((val, index) => (
+                        <div key={index} className='text-center'>
+                            <img
+                                onClick={() => handleLinkClick(val.description)}
+                                src={val.img}
+                                alt="product"
+                                className={`w-[70px] ${index === ProductData.length - 1 && 'w-[65px] opacity-70'}`}
+                            />
+                            {index === ProductData.length - 1 && val.description === 'More' && <p className='text-xs font-semibold'>More</p>}
+                        </div>
+                    ))}
+                </div>
             </Link>
             <div className='flex justify-between items-center p-[12px_16px]'>
                 <h2 className='text-[#212121] font-semibold text-[17px]'>Recently Viewed Stores</h2>
