@@ -211,9 +211,9 @@ export default function UserHome() {
                     </div>
                     <p className='text-[#333333] text-[12px] mt-1 text-center max-w-[100px]'>Mobiles</p>
                 </Link>
-                <Link to={'/category'} onClick={() => handleLinkClick('Electronics')} className='p-1 border-[1px] border-[rgb(204,204,204)] rounded'>
-                    <div className='w-[90px] h-[120px] p-1'>
-                        <img src={'https://rukminim2.flixcart.com/image/360/432/kz4gh3k0/headphone/f/v/b/-original-imagb7bmqzt7hn75.jpeg?q=60&crop=false'} alt='Laptop' className='w-full h-full object-cover' />
+              <Link to={'/category'} onClick={() => handleLinkClick('Smart Gadgest')} className='p-1 flex flex-col items-center border-[1px] border-[rgb(204,204,204)] rounded'>
+                    <div className='w-[100px] h-[120px] p-1'>
+                        <img src={'https://rukminim1.flixcart.com/image/418/502/xif0q/smartwatch/b/f/q/49-78-bxio2016-bxsm5004-android-ios-beatxp-yes-original-imagymy4x39afsvx.jpeg?q=60&crop=false'} alt='Laptop' className='w-full h-full object-cover' />
                     </div>
                     <p className='text-[#333333] text-[12px] mt-1 text-center max-w-[100px]'>Headphone & Earphone</p>
                 </Link>
