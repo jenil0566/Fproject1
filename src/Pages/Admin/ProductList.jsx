@@ -200,7 +200,7 @@ console.log(products)
                                                 <span aria-hidden="true" className="absolute " />
                                                 {product.productName}
                                             </h3>
-                                            <p className="mt-2 text-base font-medium text-gray-900 text-start">{product.price}</p>
+                                            <p className="mt-2 text-base font-medium text-gray-900 text-start">{product?.subprice}</p>
                                             <div className="flex flex-wrap justify-start gap-2 mt-2">
 
                                                 <Link to={`/admin/add-product?productId=${product.productId}`}>

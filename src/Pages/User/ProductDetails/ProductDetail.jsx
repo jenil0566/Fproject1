@@ -172,7 +172,7 @@ export default function ProductDetail() {
                     </div>
                     <div className='px-4 pt-[12px]'>
                         {/* <a href="#" className='text-[#212121] text-[14px] font-semibold underline'>View more from mokshi</a> */}
-                        <p className='text-[14px] mt-[6px] mb-1'>{productDetail.productDescription}</p>
+                        {/* <p className='text-[14px] mt-[6px] mb-1'>{productDetail.productDescription}</p> */}
                         <div className='flex gap-2 items-center'>
                             <div className='flex gap-[2px]'>
                                 <RiStarFill className='text-[#000] text-[14px]' />
@@ -215,10 +215,10 @@ export default function ProductDetail() {
                     <div className='bg-white shadow-[rgba(0,0,0,0.1)_0px_1px_6px_0px] px-[14px] pb-[24px] mb-2'>
                         <div className='flex justify-between h-[46px] items-center py-2'>
                             <p className='text-[17px] text-black font-semibold h-[30px]'>Size: <span className='text-sm'>{productDetail.size}</span></p>
-                            <div className='flex items-center gap-2'>
+                            {/* <div className='flex items-center gap-2'>
                                 <LiaRulerVerticalSolid className='text-[26px] rotate-[90deg]' />
                                 <p className='underline text-[#212121] text-[12px] font-semibold'>Size Chart</p>
-                            </div>
+                            </div> */}
                         </div>
                         <div className='flex items-center gap-2'>
                             {productDetail.size !== '' ? (productDetail.size.split(',').map((va,index) => (
@@ -355,7 +355,7 @@ export default function ProductDetail() {
                         {allProducts.map((data, index) =>
                             <div onClick={()=>handleDetailProduct(data.productId)} key={index} className="flex flex-col border-[.5px] border-gray-200 lg:rounded-md bg-white">
                                 <div className='relative'>
-                                    <img src={import.meta.env.VITE_BASE_URL + data.productImages[0]} alt="T-shirt" className="w-full sm:h-[300px] h-[250px] object-cover object-top" />
+                                    <img src={import.meta.env.VITE_BASE_URL + data.productImages[0]} alt="T-shirt" className="w-full sm:h-[300px] h-[250px] object-fit object-top" />
                                     <button className='text-[#fff] text-[24px] absolute right-[8px] top-[8px] heart-icon'><IoHeart /></button>
                                 </div>
                                 <div className="flex flex-col p-[10px_4px_8px_8px] overflow-hidden">
