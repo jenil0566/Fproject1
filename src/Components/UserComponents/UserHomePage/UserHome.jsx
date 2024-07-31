@@ -215,7 +215,13 @@ export default function UserHome() {
                     <div className='w-[100px] h-[120px] p-1'>
                         <img src={'https://rukminim1.flixcart.com/image/418/502/xif0q/smartwatch/b/f/q/49-78-bxio2016-bxsm5004-android-ios-beatxp-yes-original-imagymy4x39afsvx.jpeg?q=60&crop=false'} alt='Laptop' className='w-full h-full object-cover' />
                     </div>
-                    <p className='text-[#333333] text-[12px] mt-1 text-center max-w-[100px]'>Headphone & Earphone</p>
+                    <p className='text-[#333333] text-[12px] mt-1 text-center max-w-[100px]'>{`Smartwatch \n 89 %Off` }</p>
+                </Link>
+                <Link to={'/category'} onClick={() => handleLinkClick('Shoes')} className='p-1 flex flex-col items-center border-[1px] border-[rgb(204,204,204)] rounded'>
+                    <div className='w-[100px] h-[120px] p-1'>
+                        <img src={'https://rukminim2.flixcart.com/image/832/832/xif0q/shoe/m/i/z/9-rkt-a271-limeyellow-9-atom-yellow-original-imahfptuu9684zme.jpeg?q=70&crop=false'} alt='Laptop' className='w-full h-full object-cover' />
+                    </div>
+                    <p className='text-[#333333] text-[12px] mt-1 text-center max-w-[100px]'>{`All Branded Shoes \n 90 %Off sale` }</p>
                 </Link>
                 <Link to={'/category'} onClick={() => handleLinkClick('Fashion')} className='p-1 border-[1px] border-[rgb(204,204,204)] rounded'>
                     <div className='w-[90px] h-[120px] p-1'>
