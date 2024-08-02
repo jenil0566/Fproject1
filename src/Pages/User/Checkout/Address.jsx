@@ -42,11 +42,11 @@ export const Address = () => {
         const requiredFields = [
             'fullName',
             'phoneNumber',
-            'pincode',
-            'state',
-            'city',
-            'house',
-            'road'
+            // 'pincode',
+            // 'state',
+            // 'city',
+            // 'house',
+            // 'road'
         ];
     
         requiredFields.forEach(field => {
