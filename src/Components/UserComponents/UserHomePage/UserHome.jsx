@@ -234,7 +234,7 @@ export default function UserHome() {
                 {allProducts.map((data, index) =>
                     <div onClick={() => handleDetailProduct(data.productId)} key={index} className="flex flex-col border-[.5px] border-gray-200 lg:rounded-md bg-white">
                         <div className='relative'>
-                            <img src={import.meta.env.VITE_BASE_URL + data.productImages[0]} alt="T-shirt" className="w-full sm:h-[300px] h-[250px] object-fit object-top" />
+                            <img src={import.meta.env.VITE_BASE_URL + data.productImages[0]} alt="T-shirt" className="w-full sm:h-[300px] h-[250px] object-contain object-center" />
                             <button className='text-[#fff] text-[24px] absolute right-[8px] top-[8px] heart-icon'><IoHeart /></button>
                         </div>
                         <div className="flex flex-col p-[10px_4px_8px_8px] overflow-hidden">
