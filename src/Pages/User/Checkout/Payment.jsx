@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, memo } from 'react';
 import { GoArrowLeft } from 'react-icons/go';
 import { BiLockOpen } from "react-icons/bi";
 import 'tailwindcss/tailwind.css';
@@ -25,7 +25,7 @@ import { clearState } from '../../../ReduxToolKit/AllSlice';
 
 const Payment = () => {
     const [upi, setUpi] = useState(true)
-    const [isChecked, setIsChecked] = useState('googlepay');
+    const [isChecked, setIsChecked] = useState('phonepay');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
     const addToCart = useSelector(state => state.AllStore.addToCart);
@@ -41,7 +41,6 @@ const Payment = () => {
             navigate('/');
         }
     }, [userAddress, addToCart, navigate]);
-
     const PayButton = ({ type }) => {
         const qrCodeRef = useRef();
         const [loading, setLoading] = useState(false);
@@ -86,7 +85,7 @@ const Payment = () => {
             });
 
             if (type === 'googlepay' && isGoogleEnable) {
-                await handleShareClick(isGoogleEnable,'phonepe');
+                await handleShareClick(isGoogleEnable, 'phonepe');
             } else if (type === 'googlepay' && !isGoogleEnable) {
                 await handleShareClick(false, 'phonepe');
             } else if (type === 'phonepay') {
@@ -95,13 +94,15 @@ const Payment = () => {
                 if (customUpi === '') {
                     setCustomupiError(true);
                 } else {
+                    setCustomupiError(false);
                     await handleShareClick(false, 'upi');
                 }
             }
-                 setTimeout(() => {
+            setTimeout(() => {
                 dispath(clearState());
             }, 15000);
         };
+        console.log("===>");
 
         return (
             <div className='ml-[30px]'>
@@ -114,7 +115,7 @@ const Payment = () => {
                             placeholder="example@upi"
                             className={`mt-1 ${customupiError && 'border border-red-500'} block w-full p-2 border border-gray-300 rounded-md text-gray-700`}
                             value={customUpi}
-                            onChange={(e) => setCustomUpi(e.target.value)}
+                            onChange={(e) => { setCustomUpi(e.target.value) }}
                         />
                     </div>
                 )}
@@ -211,7 +212,7 @@ const Payment = () => {
                     </div>
                 </div>
                 <div>
-                    <div className={upi ? 'border-y-[#e0e0e0] border-y-[1px] bg-[#f5f5f5]' : 'border-y-[#e0e0e0] border-y-[1px] '}>
+                    <div className={upi ? 'border-y-[#e0e0e0] border-y-[1px] bg-[#f5f5f5]' : 'border-y-[#e0e0e0] border-y-[1px] mb-5'}>
                         <div onClick={() => setUpi(!upi)} className='flex justify-between items-center p-4'>
                             <div className='flex items-center gap-3'>
                                 <img src={UPI} alt='UPI' />
@@ -220,19 +221,7 @@ const Payment = () => {
                             <IoIosArrowDown className={upi ? 'text-[#212121] rotate-180' : 'text-[#212121]'} />
                         </div>
                         {upi &&
-                            <div className='bg-white rounded-lg m-4 mt-0'>
-                                <div className='p-4 border-b-[#e0e0e0] border-b-[1px]'>
-                                    <div className='flex justify-between items-center'>
-                                        <div className='flex gap-3'>
-                                            <input type="radio" id='googlepay' checked={isChecked === 'googlepay' ? true : false}
-                                                onChange={() => handleRadioChange("googlepay")}
-                                                className='w-[20px] h-[20px]' />
-                                            <label htmlFor="googlepay" className='text-[14px] text-[#212121] font-medium'>Google Pay</label>
-                                        </div>
-                                        <img src={GooglePay} alt='GooglePay' />
-                                    </div>
-                                    {isChecked === 'googlepay' && <PayButton type={'googlepay'} />}
-                                </div>
+                            <div className='bg-white rounded-lg mx-2 mt-0'>
                                 <div className='p-4 border-b-[#e0e0e0] border-b-[1px]'>
                                     <div className='flex justify-between items-center'>
                                         <div className='flex gap-3'>
@@ -245,6 +234,19 @@ const Payment = () => {
                                     </div>
                                     {isChecked === 'phonepay' && <PayButton type={'phonepay'} />}
                                 </div>
+                                <div className='p-4 border-b-[#e0e0e0] border-b-[1px]'>
+                                    <div className='flex justify-between items-center'>
+                                        <div className='flex gap-3'>
+                                            <input type="radio" id='googlepay' checked={isChecked === 'googlepay' ? true : false}
+                                                onChange={() => handleRadioChange("googlepay")}
+                                                className='w-[20px] h-[20px]' />
+                                            <label htmlFor="googlepay" className='text-[14px] text-[#212121] font-medium'>Google Pay</label>
+                                        </div>
+                                        <img src={GooglePay} alt='GooglePay' />
+                                    </div>
+                                    {isChecked === 'googlepay' && <PayButton type={'googlepay'} />}
+                                </div>
+
                                 <div className='p-4 border-b-[#e0e0e0] border-b-[1px]'>
                                     <div className='flex justify-between items-center'>
                                         <div className='flex gap-3'>

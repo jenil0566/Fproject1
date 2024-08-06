@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Flipkart from '/Images/flipkart.png';
 import { IoHeart, IoSearch } from 'react-icons/io5';
 import { HiMiniArrowLeft } from 'react-icons/hi2';
@@ -34,9 +34,8 @@ export default function Category() {
     const dispatch = useDispatch();
     const [isLoading, setIsLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
-    const addToCartLength = useSelector(state=>state.AllStore.addToCart);
-
-
+    const addToCartLength = useSelector(state => state.AllStore.addToCart);
+    const observerRef = useRef();
 
     const fetchProductCategoryWise = async () => {
         setIsLoading(true);
@@ -60,13 +59,6 @@ export default function Category() {
         }
     };
 
-    useEffect(() => {
-        setIsLoading(true);
-        setTimeout(() => {
-            fetchProductCategoryWise();
-        }, 1000);
-    }, [pageNumber]);
-
     const handleScroll = useCallback(() => {
         if (window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight - 500 && !isLoading && hasMore) {
             setPageNumber(prevPageNumber => prevPageNumber + 1);
@@ -84,11 +76,8 @@ export default function Category() {
     };
 
     useEffect(() => {
-        const debouncedHandleScroll = debounce(handleScroll, 200);
-        window.addEventListener('scroll', debouncedHandleScroll);
-        return () => window.removeEventListener('scroll', debouncedHandleScroll);
-    }, [handleScroll]);
-
+        fetchProductCategoryWise();
+    }, [pageNumber]);
 
     useEffect(() => {
         const detail = async () => {
@@ -103,20 +92,52 @@ export default function Category() {
         detail();
     }, [categoryPage, categories]);
 
+    const loadMore = useCallback(() => {
+        if (!isLoading && hasMore) {
+            setPageNumber(prevPageNumber => prevPageNumber + 1);
+        }
+    }, [isLoading, hasMore]);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            entries => {
+                if (entries[0].isIntersecting) {
+                    loadMore();
+                }
+            },
+            { threshold: 1.0 }
+        );
+
+        if (observerRef.current) {
+            observer.observe(observerRef.current);
+        }
+
+        return () => {
+            if (observerRef.current) {
+                observer.unobserve(observerRef.current);
+            }
+        };
+    }, [loadMore]);
+
+    useEffect(() => {
+        const debouncedHandleScroll = debounce(handleScroll, 200);
+        window.addEventListener('scroll', debouncedHandleScroll);
+        return () => window.removeEventListener('scroll', debouncedHandleScroll);
+    }, [handleScroll]);
+
     const handleDetailProduct = async (id) => {
         setIsLoading(true);
         try {
             const response = await api.get(`/products/${id}`);
             dispatch(addProductDetail(response.data.data));
-            navigate(`/product-detail/${id}`)
+            navigate(`/product-detail/${id}`);
         } catch (error) {
             console.error(error);
             setError(error.response.data);
         } finally {
             setIsLoading(false);
         }
-    }
-
+    };
 
     return (
         <div>
@@ -133,7 +154,7 @@ export default function Category() {
                         <IoSearch className='text-[20px]' />
                     </button>
                     <div className="relative">
-                        <button onClick={()=>navigate('/order-summary')} className="text-[22px]">
+                        <button onClick={() => navigate('/order-summary')} className="text-[22px]">
                             <FaCartPlus />
                         </button>
                         <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
@@ -224,6 +245,7 @@ export default function Category() {
                 </div>
             )}
             {error && <NoMoreProducts message={error.message} />}
+            <div ref={observerRef} style={{ height: '15px' }} />
         </div>
     )
 }

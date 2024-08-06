@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Slider from "react-slick";
 import { FaChevronRight } from "react-icons/fa6";
 import { RiStarFill } from "react-icons/ri";
@@ -96,16 +96,18 @@ export default function UserHome() {
     const [hasMore, setHasMore] = useState(true);
     const navigate = useNavigate();
     const [allProducts, setAllProducts] = useState([]);
+    const observerRef = useRef();
+
 
     const handleLinkClick = (name) => {
         let linkdata;
         if (name === 'All') {
-            linkdata = 'All'
+            linkdata = 'All';
         } else if (name === 'More') {
-            linkdata = 'More'
+            linkdata = 'More';
         } else {
             const newdata = categories.find((n) => n.name === name);
-            linkdata = newdata.id
+            linkdata = newdata.id;
         }
         dispatch(addCategoryPage(linkdata));
     };
@@ -128,10 +130,7 @@ export default function UserHome() {
     };
 
     useEffect(() => {
-        setIsLoading(true);
-        setTimeout(() => {
-            fetchAllProduct();
-        }, 1000);
+        fetchAllProduct();
     }, [pageNumber]);
 
     const handleScroll = useCallback(() => {
@@ -156,19 +155,46 @@ export default function UserHome() {
         return () => window.removeEventListener('scroll', debouncedHandleScroll);
     }, [handleScroll]);
 
+    const loadMore = useCallback(() => {
+        if (!isLoading && hasMore) {
+            setPageNumber(prevPageNumber => prevPageNumber + 1);
+        }
+    }, [isLoading, hasMore]);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            entries => {
+                if (entries[0].isIntersecting) {
+                    loadMore();
+                }
+            },
+            { threshold: 1.0 }
+        );
+
+        if (observerRef.current) {
+            observer.observe(observerRef.current);
+        }
+
+        return () => {
+            if (observerRef.current) {
+                observer.unobserve(observerRef.current);
+            }
+        };
+    }, [loadMore]);
+
     const handleDetailProduct = async (id) => {
         setIsLoading(true);
         try {
             const response = await api.get(`/products/${id}`);
             dispatch(addProductDetail(response.data.data));
-            navigate(`/product-detail/${id}`)
+            navigate(`/product-detail/${id}`);
         } catch (error) {
             console.error(error);
             setError(error.response.data);
         } finally {
             setIsLoading(false);
         }
-    }
+    };
 
     return (
         <div className='bg-[#fff]'>
@@ -184,7 +210,7 @@ export default function UserHome() {
                     </Slider>
                 </div>
             </div>
-           <Link to={'/category'} className='pb-[20px] bg-[#f9d6c0]'>
+            <Link to={'/category'} className='pb-[20px] bg-[#f9d6c0]'>
                 <div className='grid grid-cols-5  justify-items-center bg-[#f9d6c0]'>
                     {ProductData.map((val, index) => (
                         <div key={index} className='text-center'>
@@ -211,17 +237,17 @@ export default function UserHome() {
                     </div>
                     <p className='text-[#333333] text-[12px] mt-1 text-center max-w-[100px]'>Mobiles</p>
                 </Link>
-              <Link to={'/category'} onClick={() => handleLinkClick('Smart Gadgest')} className='p-1 flex flex-col items-center border-[1px] border-[rgb(204,204,204)] rounded'>
+                <Link to={'/category'} onClick={() => handleLinkClick('Smart Gadgest')} className='p-1 flex flex-col items-center border-[1px] border-[rgb(204,204,204)] rounded'>
                     <div className='w-[100px] h-[120px] p-1'>
                         <img src={'https://rukminim1.flixcart.com/image/418/502/xif0q/smartwatch/b/f/q/49-78-bxio2016-bxsm5004-android-ios-beatxp-yes-original-imagymy4x39afsvx.jpeg?q=60&crop=false'} alt='Laptop' className='w-full h-full object-cover' />
                     </div>
-                    <p className='text-[#333333] text-[12px] mt-1 text-center max-w-[100px]'>{`Smartwatch \n 89 %Off` }</p>
+                    <p className='text-[#333333] text-[12px] mt-1 text-center max-w-[100px]'>{`Smartwatch \n 89 %Off`}</p>
                 </Link>
                 <Link to={'/category'} onClick={() => handleLinkClick('Shoes')} className='p-1 flex flex-col items-center border-[1px] border-[rgb(204,204,204)] rounded'>
                     <div className='w-[100px] h-[120px] p-1'>
                         <img src={'https://rukminim2.flixcart.com/image/832/832/xif0q/shoe/m/i/z/9-rkt-a271-limeyellow-9-atom-yellow-original-imahfptuu9684zme.jpeg?q=70&crop=false'} alt='Laptop' className='w-full h-full object-cover' />
                     </div>
-                    <p className='text-[#333333] text-[12px] mt-1 text-center max-w-[100px]'>{`All Branded Shoes \n 90 %Off sale` }</p>
+                    <p className='text-[#333333] text-[12px] mt-1 text-center max-w-[100px]'>{`All Branded Shoes \n 90 %Off sale`}</p>
                 </Link>
                 <Link to={'/category'} onClick={() => handleLinkClick('Fashion')} className='p-1 border-[1px] border-[rgb(204,204,204)] rounded'>
                     <div className='w-[90px] h-[120px] p-1'>
@@ -269,6 +295,7 @@ export default function UserHome() {
                 </div>
             )}
             {error && <NoMoreProducts message={error.message} />}
+            <div ref={observerRef} style={{ height: '15px' }} />
         </div>
     )
 }

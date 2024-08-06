@@ -37,18 +37,18 @@ export const Address = () => {
     const validateForm = () => {
         const errors = {};
         let isValid = true;
-    
+
         // Define the required fields
         const requiredFields = [
             'fullName',
             'phoneNumber',
-            // 'pincode',
-            // 'state',
-            // 'city',
+            'pincode',
+            'state',
+            'city',
             // 'house',
             // 'road'
         ];
-    
+
         requiredFields.forEach(field => {
             if (formData.hasOwnProperty(field)) {
                 if (!formData[field].trim()) {
@@ -62,7 +62,7 @@ export const Address = () => {
                 isValid = false;
             }
         });
-    
+
         setFormErrors(errors);
         return isValid;
     };
@@ -85,7 +85,7 @@ export const Address = () => {
                     <div className="flex items-center gap-3 px-[11px]">
                         <div className="bg-[#2874f0] min-w-[19px] h-[19px] rounded-full flex justify-center items-center text-[12px] text-white font-semibold">1</div>
                         <div className="bg-[#dbdbdb] w-full h-[2px]"></div>
-                        <div onClick={()=>navigate('/order-summary')} className="text-[#2874f0] border-[#2874f0] border-[1px] min-w-[19px] h-[19px] rounded-full flex justify-center items-center text-[12px] font-semibold">2</div>
+                        <div onClick={() => navigate('/order-summary')} className="text-[#2874f0] border-[#2874f0] border-[1px] min-w-[19px] h-[19px] rounded-full flex justify-center items-center text-[12px] font-semibold">2</div>
                         <div className="bg-[#dbdbdb] w-full h-[2px]"></div>
                         <div className="text-[#2874f0] border-[#2874f0] border-[1px] min-w-[19px] h-[19px] rounded-full flex justify-center items-center text-[12px] font-semibold">3</div>
                     </div>
@@ -150,7 +150,7 @@ export const Address = () => {
                                 value={formData.state}
                                 onChange={handleInputChange}
                                 className={`mt-1 block w-full p-2 border ${formErrors.state ? 'border-red-500' : 'border-gray-300'} rounded-md text-[14px] text-[#212121]`}
-                                required
+                            // required
                             />
                         </div>
                         <div className="w-1/2">
@@ -161,7 +161,7 @@ export const Address = () => {
                                 value={formData.city}
                                 onChange={handleInputChange}
                                 className={`mt-1 block w-full p-2 border ${formErrors.city ? 'border-red-500' : 'border-gray-300'} rounded-md text-[14px] text-[#212121]`}
-                                required
+                            // required
                             />
                         </div>
                     </div>
@@ -173,7 +173,7 @@ export const Address = () => {
                             value={formData.house}
                             onChange={handleInputChange}
                             className={`mt-1 block w-full p-2 border ${formErrors.house ? 'border-red-500' : 'border-gray-300'} rounded-md text-[14px] text-[#212121]`}
-                            required
+                        // required
                         />
                     </div>
                     <div className="mb-3">
@@ -184,7 +184,7 @@ export const Address = () => {
                             value={formData.road}
                             onChange={handleInputChange}
                             className={`mt-1 block w-full p-2 border ${formErrors.road ? 'border-red-500' : 'border-gray-300'} rounded-md text-[14px] text-[#212121]`}
-                            required
+                        // required
                         />
                     </div>
                     <div className="mt-3">
