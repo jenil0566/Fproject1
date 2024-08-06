@@ -13,6 +13,7 @@ import Spinner from '../../Reusable/Spinner';
 import NoMoreProducts from '../../Reusable/NoMoreProducts';
 import { calculateDiscountPercentage, formatToINR, generateRandomNumber } from '../../../Utils/function';
 import api from '../../../Utils/api';
+import { FaChevronDown } from 'react-icons/fa';
 
 export default function UserHome() {
     const settings = {
@@ -226,8 +227,8 @@ export default function UserHome() {
                 </div>
             </Link>
             <div className='flex justify-between items-center p-[12px_16px]'>
-                <h2 className='text-[#212121] font-semibold text-[17px]'>Recently Viewed Stores</h2>
-                <button className='bg-[#2a55e5] rounded-full w-[24px] h-[24px] flex justify-center items-center text-white text-[12px]'><FaChevronRight />
+                <h2 className='text-[#212121] font-semibold text-[17px]'>Click here for more Products</h2>
+                <button className='bg-[#2a55e5] rounded-full w-[24px] h-[24px] flex justify-center items-center text-white text-[12px]'><FaChevronDown />
                 </button>
             </div>
             <div className='flex gap-2 mb-4 px-4 overflow-x-auto'>
@@ -236,6 +237,12 @@ export default function UserHome() {
                         <img src={'https://rukminim2.flixcart.com/image/940/940/xif0q/mobile/c/s/x/-original-imagzjhwaaewgj8r.jpeg?q=60'} alt='Laptop' className='w-full h-full object-cover' />
                     </div>
                     <p className='text-[#333333] text-[12px] mt-1 text-center max-w-[100px]'>Mobiles</p>
+                </Link>
+                <Link to={'/category'} onClick={() => handleLinkClick('Electronics')} className='p-1 flex flex-col items-center border-[1px] border-[rgb(204,204,204)] rounded'>
+                    <div className='w-[100px] h-[120px] p-1'>
+                        <img src={'https://m.media-amazon.com/images/I/61upWaZE0gL._SX522_.jpg'} alt='Laptop' className='w-full h-full object-cover' />
+                    </div>
+                    <p className='text-[#333333] text-[12px] mt-1 text-center max-w-[100px]'>{`Earbuds\n 95 % Off`}</p>
                 </Link>
                 <Link to={'/category'} onClick={() => handleLinkClick('Smart Gadgest')} className='p-1 flex flex-col items-center border-[1px] border-[rgb(204,204,204)] rounded'>
                     <div className='w-[100px] h-[120px] p-1'>
@@ -249,11 +256,17 @@ export default function UserHome() {
                     </div>
                     <p className='text-[#333333] text-[12px] mt-1 text-center max-w-[100px]'>{`All Branded Shoes \n 90 %Off sale`}</p>
                 </Link>
-                <Link to={'/category'} onClick={() => handleLinkClick('Fashion')} className='p-1 border-[1px] border-[rgb(204,204,204)] rounded'>
+                <Link to={'/category'} onClick={() => handleLinkClick('Home & Furniture')} className='p-1 border-[1px] border-[rgb(204,204,204)] rounded'>
                     <div className='w-[90px] h-[120px] p-1'>
-                        <img src={Shirt} alt='Laptop' className='w-full h-full object-cover' />
+                        <img src={'https://m.media-amazon.com/images/I/61RLw-63zrL._SX425_.jpg'} alt='Laptop' className='w-full h-full object-cover' />
                     </div>
-                    <p className='text-[#333333] text-[12px] mt-1 text-center object-top object-cover max-w-[100px] break-words'>Men's Shirt and Trouser Fabrics</p>
+                    <p className='text-[#333333] text-[12px] mt-1 text-center object-top object-cover max-w-[100px] break-words'>Home decor 87% Off</p>
+                </Link>
+                <Link to={'/category'} onClick={() => handleLinkClick('TVs & Appliances')} className='p-1 border-[1px] border-[rgb(204,204,204)] rounded'>
+                    <div className='w-[90px] h-[120px] p-1'>
+                        <img src={'https://m.media-amazon.com/images/I/81nikv9C6lL._AC_SX296_SY426_FMwebp_QL65_.jpg'} alt='Laptop' className='w-full h-full object-contain' />
+                    </div>
+                    <p className='text-[#333333] text-[12px] mt-1 text-center object-top object-cover max-w-[100px] break-words'>Best deal for TV  87% Off</p>
                 </Link>
             </div>
             <div className='grid xl:grid-cols-4 lg:grid-cols-3 grid-cols-2 lg:gap-[30px] max-w-[1600px] mx-auto sm:px-[40px] md:my-[30px]'>
